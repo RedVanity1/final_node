@@ -1,0 +1,25 @@
+{
+  "name": "node_final",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RedVanity1/node_final.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RedVanity1/node_final/issues"
+  },
+  "homepage": "https://github.com/RedVanity1/node_final#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "firebase-admin": "^10.0.0",
+    "nodemon": "^2.0.15"
+  }
+}
