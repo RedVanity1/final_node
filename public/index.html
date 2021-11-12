@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Game Shelf</title>
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <main>
+        <form>
+            <h1>Game Shelf</h1>
+            <label for="game_id">ID</label><br>
+            <input type="text" name="game_id" id="game_id"><br>
+            <label for="game_name">Game Name</label><br>
+            <input type="text" name="game_name" id="game_name"><br>
+            <label for="price">Price (USD)</label><br>
+            <input type="text" name="price" id="price"><br>
+            <button id="addBtn" class="btn waves-effect waves-light">Add/Update</button>
+            <button id="deleteBtn" class="btn waves-effect waves-light">Delete</button> <br> <br>
+
+            <table>
+                <thead>
+                    <th>No.</th>
+                    <th>ID</th>
+                    <th>Game</th> 
+                    <th>Price</th>
+                </thead>
+            </table>
+            <tbody id="tbody1"></tbody>
+        </form>
+    </main>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-app.js";
+        import { getDatabase, ref, child, onValue, get } from "https://www.gstatic.com/firebasejs/9.4.1/firebase-database.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAfU01GoWeHbx7AcYJvXafBPaZ8InMzJEo",
+            authDomain: "node-77c7c.firebaseapp.com",
+            databaseURL: "https://node-77c7c-default-rtdb.firebaseio.com",
+            projectId: "node-77c7c",
+            storageBucket: "node-77c7c.appspot.com",
+            messagingSenderId: "798575425352",
+            appId: "1:798575425352:web:4b51d6fb204a298f0c657d"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        var gameNo = 0;
+        var tbody = document.getElementById('tbody1');
+
+        function AddItemToTable(gameNo,gameId,gameName,gamePrice){
+            let trow = document.createElement('trow');
+            let tda = document.createElement('td');
+            let td1 = document.createElement('td');
+            let td2 = document.createElement('td');
+            let td3 = document.createElement('td');
+
+            tda.innerHTML = ++gameNo;
+            td1.innerHTML = gameId;
+            td2.innerHTML = gameName;
+            td3.innerHTML = gamePrice;
+
+            trow.appendChild(tda);
+            trow.appendChild(td1);
+            trow.appendChild(td2);
+            trow.appendChild(td3);
+
+            tbody.appendChild(trow);
+        };
+
+        function AddAllItemsToTable(game){
+            var gameNo = 0;
+            tbody.innerHTML="";
+            game.forEach(element => {
+                AddItemToTable(element.gameNo, element.gameId, element.gameName, element.gamePrice);
+            });
+        };
+
+        function GetAllDataOnce(){
+            const dbRef = ref(db);
+
+            get(child(dbRef, 'shelf'))
+            .then((snapshot) => {
+             if (snapshot.exists()) {
+                var game = [];
+
+                snapshot.forEach(childSnapshot => {
+                    game.push(childSnapshot.val());
+                });
+
+                console.log(game);
+
+                AddAllItemsToTable(game);
+
+            } else {
+                console.log("No data available");
+            }
+            }).catch((error) => {
+            console.error(error);
+            });
+        };
+
+        window.onload = GetAllDataOnce;
+
+    </script>
+    <script src="./function.js"></script>
+</body>
+</html>
